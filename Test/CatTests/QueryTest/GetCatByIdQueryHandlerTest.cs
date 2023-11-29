@@ -5,7 +5,7 @@ using Infrastructure.Database;
 namespace Test.CatTests.QueryTest
 {
     [TestFixture]
-    public class GetCatByIdTests
+    public class GetCatByIdQueryHandlerTest
     {
         private GetCatByIdQueryHandler _handler;
         private MockDatabase _mockDatabase;
