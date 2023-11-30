@@ -9,6 +9,6 @@ namespace Application.Commands.Dogs.DeleteDog
         {
             Id = dogId;
         }
-        public Guid Id { get;}
+        public Guid Id { get; }
     }
 }
