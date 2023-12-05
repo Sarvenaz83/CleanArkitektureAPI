@@ -16,6 +16,10 @@ namespace Application.Commands.Cats.AddCat
 
         public Task<Cat> Handle(AddCatCommand request, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(request.NewCat.Name))
+            {
+                return Task.FromResult<Cat>(null);
+            }
             Cat catToCreate = new()
             {
                 Id = Guid.NewGuid(),

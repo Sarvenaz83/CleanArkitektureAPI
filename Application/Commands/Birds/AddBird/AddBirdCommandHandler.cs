@@ -16,6 +16,11 @@ namespace Application.Commands.Birds.AddBird
 
         public Task<Bird> Handle(AddBirdCommand request, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(request.NewBird.Name))
+            {
+                return Task.FromResult<Bird>(null);
+            }
+
             Bird birdToCreate = new()
             {
                 Id = Guid.NewGuid(),

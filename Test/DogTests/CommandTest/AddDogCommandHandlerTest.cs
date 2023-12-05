@@ -1,4 +1,5 @@
-﻿using Application.Commands.Dogs;
+﻿using Application.Commands.Cats.AddCat;
+using Application.Commands.Dogs;
 using Application.Dtos;
 using Infrastructure.Database;
 
@@ -28,7 +29,25 @@ namespace Test.DogTests.CommandTest
             var result = await _handler.Handle(addDogCommand, CancellationToken.None);
 
             //Assert
-            Assert.That(result, Is.Not.Null);
+            Assert.IsNotNull(result);
+            Assert.That(result.Name, Is.EqualTo(newDog.Name));
+            Assert.IsTrue(_mockDatabase.Dogs.Contains(result));
+        }
+
+        [Test]
+        public async Task Handle_WithNullName_ShouldNotCreateDog()
+        {
+            //Arrang
+            var newDog = new DogDto { Name = "" };
+            var addDogCommand = new AddDogCommand(newDog);
+
+
+            //Act
+            var result = await _handler.Handle(addDogCommand, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(result);
+
         }
     }
 }

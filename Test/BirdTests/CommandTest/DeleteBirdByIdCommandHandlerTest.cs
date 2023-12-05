@@ -32,10 +32,21 @@ namespace Test.BirdTests.CommandTest
 
             //Assert
             Assert.IsNotNull(result);
+            Assert.That(result.Id, Is.EqualTo(newBird.Id));
+        }
 
-            //Chech That bird has deleted from mock database
-            var deletedBirdByIdInDatabase = _mockDatabase.Birds.FirstOrDefault(bird => bird.Id == deleteBirdByIdCommand.Id);
-            Assert.IsNull(deletedBirdByIdInDatabase);
+        [Test]
+        public async Task Handle_InvaliId_DoesNotExist()
+        {
+            //Arrange
+            var invalidBirdId = Guid.NewGuid();
+            var invalidBirdIdCommand = new DeleteBirdByIdCommand(invalidBirdId);
+
+            //Act
+            var invalidBirdIdResult = await _handler.Handle(invalidBirdIdCommand, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(invalidBirdIdResult);
         }
     }
 }

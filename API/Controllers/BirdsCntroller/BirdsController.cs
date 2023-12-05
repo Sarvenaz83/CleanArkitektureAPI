@@ -5,6 +5,7 @@ using Application.Dtos;
 using Application.Queries.Birds.GetAll;
 using Application.Queries.Birds.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.BirdsCntroller
@@ -21,7 +22,7 @@ namespace API.Controllers.BirdsCntroller
 
         //Get all birds from database
         [HttpGet]
-        [Route("getAllBirds")]
+        [Route("getAllBirds"), AllowAnonymous]
         public async Task<IActionResult> GetAllBirds()
         {
             //return Ok("GET ALL BIRDS");
@@ -30,7 +31,7 @@ namespace API.Controllers.BirdsCntroller
 
         //Get a bird by Id
         [HttpGet]
-        [Route("getBirdById/{birdId}")]
+        [Route("getBirdById/{birdId}"), AllowAnonymous]
         public async Task<IActionResult> GetBirdById(Guid birdId)
         {
             return Ok(await _mediator.Send(new GetBirdByIdQuery(birdId)));
@@ -38,7 +39,7 @@ namespace API.Controllers.BirdsCntroller
 
         //Create a new bird
         [HttpPost]
-        [Route("addNewBird")]
+        [Route("addNewBird"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddBird([FromBody] BirdDto newBird)
         {
             return Ok(await _mediator.Send(new AddBirdCommand(newBird)));
@@ -46,7 +47,7 @@ namespace API.Controllers.BirdsCntroller
 
         //Update a specific Bird
         [HttpPut]
-        [Route("updateBird/{updatedBirdId}")]
+        [Route("updateBird/{updatedBirdId}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateBird([FromBody] BirdDto updatedBird, Guid updatedBirdId)
         {
             return Ok(await _mediator.Send(new UpdateBirdByIdCommand(updatedBird, updatedBirdId)));
@@ -54,7 +55,7 @@ namespace API.Controllers.BirdsCntroller
 
         //Delete a bird by Id
         [HttpDelete]
-        [Route("deleteBird/{deleteBirdById}")]
+        [Route("deleteBird/{deleteBirdById}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBird(Guid birdId)
         {
             return Ok(await _mediator.Send(new DeleteBirdByIdCommand(birdId)));

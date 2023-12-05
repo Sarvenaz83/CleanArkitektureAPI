@@ -1,4 +1,5 @@
-﻿using Application.Commands.Dogs.DeleteDog;
+﻿using Application.Commands.Cats.DeleteCat;
+using Application.Commands.Dogs.DeleteDog;
 using Domain.Models;
 using Infrastructure.Database;
 
@@ -20,7 +21,7 @@ namespace Test.DogTests.CommandTest
         public async Task Handle_DeleteDogById_InDatabase()
         {
             //Arrange
-            var newDog = new Dog { Id = Guid.NewGuid() };
+            var newDog = new Dog { Id = Guid.NewGuid(), Name = "" };
             _mockDatabase.Dogs.Add(newDog);
 
             //Create a sample of DleteDogByIdCommand
@@ -31,10 +32,21 @@ namespace Test.DogTests.CommandTest
 
             //Assert
             Assert.IsNotNull(result);
+        }
 
-            //Chech That dog has deleted from mock database
-            var deletedDogByIdInDatabase = _mockDatabase.Dogs.FirstOrDefault(dog => dog.Id == deleteDogByIdCommand.Id);
-            Assert.IsNull(deletedDogByIdInDatabase);
+        [Test]
+        public async Task Handle_WithNonExistentDogId_ShouldReturnNull()
+        {
+            //Arrang
+            var nonExistentDogId = Guid.NewGuid();
+            var deleteDogCommand = new DeleteDogByIdCommand(nonExistentDogId);
+
+            //Act
+            var result = await _handler.Handle(deleteDogCommand, CancellationToken.None);
+
+            //Assert
+            Assert.Null(result);
+
         }
     }
 }

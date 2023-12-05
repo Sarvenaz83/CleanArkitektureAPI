@@ -5,6 +5,7 @@ using Application.Dtos;
 using Application.Queries.Cats.GetAll;
 using Application.Queries.Cats.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.CatsController
@@ -21,7 +22,7 @@ namespace API.Controllers.CatsController
 
         //Get all cats from database
         [HttpGet]
-        [Route("getAllCats")]
+        [Route("getAllCats"), AllowAnonymous]
         public async Task<IActionResult> GetAllCats()
         {
             //return Ok("GET ALL CATS");
@@ -30,7 +31,7 @@ namespace API.Controllers.CatsController
 
         //Get a cat by Id
         [HttpGet]
-        [Route("getCatById/{catId}")]
+        [Route("getCatById/{catId}"), AllowAnonymous]
         public async Task<IActionResult> GetCatById(Guid catId)
         {
             return Ok(await _mediator.Send(new GetCatByIdQuery(catId)));
@@ -38,7 +39,7 @@ namespace API.Controllers.CatsController
 
         //Create a new cat
         [HttpPost]
-        [Route("addNewCat")]
+        [Route("addNewCat"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCat([FromBody] CatDto newCat)
         {
             return Ok(await _mediator.Send(new AddCatCommand(newCat)));
@@ -46,7 +47,7 @@ namespace API.Controllers.CatsController
 
         //Update a specific Cat
         [HttpPut]
-        [Route("updateCat/{updatedCatId}")]
+        [Route("updateCat/{updatedCatId}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCat([FromBody] CatDto updatedCat, Guid updatedCatId)
         {
             return Ok(await _mediator.Send(new UpdateCatByIdCommand(updatedCat, updatedCatId)));
@@ -54,7 +55,7 @@ namespace API.Controllers.CatsController
 
         //Delete a cat by Id
         [HttpDelete]
-        [Route("deleteCat/{deleteCatById}")]
+        [Route("deleteCat/{deleteCatById}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCat(Guid catId)
         {
             return Ok(await _mediator.Send(new DeleteCatByIdCommand(catId)));

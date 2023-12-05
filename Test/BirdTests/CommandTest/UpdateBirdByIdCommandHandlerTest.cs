@@ -1,4 +1,6 @@
 ﻿using Application.Commands.Birds.UpdateBird;
+using Application.Commands.Dogs.UpdateDog;
+using Application.Dtos;
 using Domain.Models;
 using Infrastructure.Database;
 
@@ -33,6 +35,24 @@ namespace Test.BirdTests.CommandTest
             //Assert
             Assert.NotNull(result);
             Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task Handle_WithNonExistentId_ShouldReturnNull()
+        {
+            //Arrang
+            var nonExistentBirdId = Guid.NewGuid();
+            var updatedBirdDto = new BirdDto { Name = "UpdatedBirdName" };
+            var mockDatabse = new MockDatabase();
+            var handler = new UpdateBirdByIdCommandHandler(mockDatabse);
+
+            var updateBirdCommand = new UpdateBirdByIdCommand(updatedBirdDto, nonExistentBirdId);
+
+            //Act
+            var updatedBird = await handler.Handle(updateBirdCommand, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(updatedBird, "No bird should be updated for a non-existent birdId.");
         }
     }
 }

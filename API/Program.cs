@@ -1,8 +1,10 @@
 using Application;
 using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,7 +47,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddApplication().AddInfrastructure();
 
 // Configure JWT Authentication
-/*builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
 {
 }).AddJwtBearer("Bearer", options =>
 {
@@ -57,7 +59,7 @@ builder.Services.AddApplication().AddInfrastructure();
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             builder.Configuration["JWTToken:Token"]!)),
     };
-});*/
+});
 
 var app = builder.Build();
 
