@@ -10,26 +10,42 @@ namespace Test.DogTests.QueryTest
     {
         private MockDatabase _mockDatabase;
         private GetAllDogsQueryHandler _handler;
+        private MockDatabase _originalDatabase;
 
         [SetUp]
         public void SetUp()
         {
             _mockDatabase = new MockDatabase();
             _handler = new GetAllDogsQueryHandler(_mockDatabase);
+            _originalDatabase = new MockDatabase();
         }
 
         [Test]
         public async Task Handle_GetAllDogs_FromDatabase_ReturnsCorrect()
         {
             //Arrange
-            var getAllDogQuery = new GetAllDogsQuery();
+            List<Dog> listOfDog = _originalDatabase.Dogs;
 
             //Act
-            var result = await _handler.Handle(getAllDogQuery, CancellationToken.None);
+            List<Dog> result = await _handler.Handle(new GetAllDogsQuery(), CancellationToken.None);
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<List<Dog>>(result);
+            CollectionAssert.AreEqual(listOfDog, result);
+        }
+
+        [Test]
+        public async Task Handle_InvalidDogsInDatabase_ReturnsEmptyList()
+        {
+            //Arrange
+            _mockDatabase = null;
+            _handler = new GetAllDogsQueryHandler(_mockDatabase!);
+
+            //Act
+            List<Dog> result = await _handler.Handle(new GetAllDogsQuery(), CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(result);
+
         }
     }
 }
