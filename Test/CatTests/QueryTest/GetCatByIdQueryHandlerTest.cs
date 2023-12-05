@@ -1,4 +1,5 @@
-﻿using Application.Queries.Cats.GetById;
+﻿using Application.Queries.Birds.GetById;
+using Application.Queries.Cats.GetById;
 using Application.Queries.Dogs.GetById;
 using Infrastructure.Database;
 
@@ -31,6 +32,21 @@ namespace Test.CatTests.QueryTest
             // Assert
             Assert.NotNull(result);
             Assert.That(result.Id, Is.EqualTo(catId));
+        }
+
+        [Test]
+        public async Task Handle_InvalidCatId_ReturnsNull()
+        {
+            //Arrange
+            var invalidCatId = Guid.NewGuid();
+
+            var query = new GetCatByIdQuery(invalidCatId);
+
+            //Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(result);
         }
 
     }

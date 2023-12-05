@@ -32,5 +32,20 @@ namespace Test.BirdTests.QueryTest
             Assert.NotNull(result);
             Assert.That(result.Id, Is.EqualTo(birdId));
         }
+
+        [Test]
+        public async Task Handle_InvalidBirdId_ReturnsNull()
+        {
+            //Arrange
+            var invalidBirdId = Guid.NewGuid();
+
+            var query = new GetBirdByIdQuery(invalidBirdId);
+
+            //Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(result);
+        }
     }
 }
