@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Birds.AddBird;
+using Application.Commands.Cats.AddCat;
 using Application.Dtos;
 using Infrastructure.Database;
 
@@ -28,7 +29,24 @@ namespace Test.BirdTests.CommandTest
             var result = await _handler.Handle(addBirdCommand, CancellationToken.None);
 
             //Assert
-            Assert.That(result, Is.Not.Null);
+            Assert.IsNotNull(result);
+            Assert.That(result.Name, Is.EqualTo(newBird.Name));
+            Assert.IsTrue(_mockDatabase.Birds.Contains(result));
+        }
+        [Test]
+        public async Task Handle_WithNullName_ShouldNotCreateBird()
+        {
+            //Arrang
+            var newBird = new BirdDto { Name = "" };
+            var addBirdCommand = new AddBirdCommand(newBird);
+
+
+            //Act
+            var result = await _handler.Handle(addBirdCommand, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(result);
+
         }
     }
 }

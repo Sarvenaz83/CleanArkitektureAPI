@@ -16,8 +16,16 @@ namespace Application.Commands.Cats.UpdateCat
         public Task<Cat> Handle(UpdateCatByIdCommand request, CancellationToken cancellationToken)
         {
             Cat catToUpdate = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == request.Id)!;
-            catToUpdate.Name = request.UpdatedCat.Name;
+
+            if (catToUpdate != null)
+            {
+                catToUpdate.Name = request.UpdatedCat.Name;
+                catToUpdate.LikesToPlay = request.UpdatedCat.LikesToPlay;
+                return Task.FromResult(catToUpdate);
+            }
+
             return Task.FromResult(catToUpdate);
+
         }
     }
 }

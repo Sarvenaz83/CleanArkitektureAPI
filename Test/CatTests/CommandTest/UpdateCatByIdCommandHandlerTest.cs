@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Cats.UpdateCat;
+using Application.Dtos;
 using Domain.Models;
 using Infrastructure.Database;
 
@@ -25,7 +26,7 @@ namespace Test.CatTests.CommandTest
             _mockDatabase.Cats.Add(newCat);
 
             //Create a sample
-            var updateCatCommand = new UpdateCatByIdCommand(updatedCat: new Application.Dtos.CatDto { Name = "UpdatedCatName", LikesToPlay = false }, id: newCat.Id);
+            var updateCatCommand = new UpdateCatByIdCommand(updatedCat: new CatDto { Name = "UpdatedCatName", LikesToPlay = false }, id: newCat.Id);
 
             //Act
             var result = await _handler.Handle(updateCatCommand, CancellationToken.None);
@@ -33,6 +34,24 @@ namespace Test.CatTests.CommandTest
             //Assert
             Assert.NotNull(result);
             Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task Handle_WithNonExistentId_ShouldReturnNull()
+        {
+            //Arrang
+            var nonExistentCatId = Guid.NewGuid();
+            var updatedCatDto = new CatDto { Name = "UpdatedCatName" };
+            var mockDatabse = new MockDatabase();
+            var handler = new UpdateCatByIdCommandHandler(mockDatabse);
+
+            var updateCatCommand = new UpdateCatByIdCommand(updatedCatDto, nonExistentCatId);
+
+            //Act
+            var updatedCat = await handler.Handle(updateCatCommand, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(updatedCat, "No cat should be updated for a non-existent catId.");
         }
     }
 }

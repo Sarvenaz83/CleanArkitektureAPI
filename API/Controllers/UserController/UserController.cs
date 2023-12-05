@@ -43,6 +43,7 @@ namespace API.Controllers.UserController
             {
                 return BadRequest("Password is wrong!");
             }
+
             string token = GenerateJWTToken(user);
             return Ok(token);
         }

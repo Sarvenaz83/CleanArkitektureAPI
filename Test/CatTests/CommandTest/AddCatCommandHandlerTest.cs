@@ -29,7 +29,25 @@ namespace Test.CatTests.CommandTest
             var result = await _handler.Handle(addCatCommand, CancellationToken.None);
 
             //Assert
-            Assert.That(result, Is.Not.Null);
+            Assert.IsNotNull(result);
+            Assert.That(result.Name, Is.EqualTo(newCat.Name));
+            Assert.IsTrue(_mockDatabase.Cats.Contains(result));
+        }
+
+        [Test]
+        public async Task Handle_WithNullName_ShouldNotCreateCat()
+        {
+            //Arrang
+            var newCat = new CatDto { Name = "" };
+            var addCatCommand = new AddCatCommand(newCat);
+
+
+            //Act
+            var result = await _handler.Handle(addCatCommand, CancellationToken.None);
+
+            //Assert
+            Assert.IsNull(result);
+
         }
     }
 

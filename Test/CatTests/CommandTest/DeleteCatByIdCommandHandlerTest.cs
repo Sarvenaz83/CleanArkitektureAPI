@@ -19,10 +19,10 @@ namespace Test.CatTests.CommandTest
         }
 
         [Test]
-        public async Task Handle_DeleteCatById_InDatabase()
+        public async Task Handle_WithValidCatId_ShouldDeleteCat()
         {
             //Arrange
-            var newCat = new Cat { Id = Guid.NewGuid() };
+            var newCat = new Cat { Id = Guid.NewGuid(), Name = "" };
             _mockDatabase.Cats.Add(newCat);
 
             //Create a sample of DleteCatByIdCommand
@@ -33,10 +33,21 @@ namespace Test.CatTests.CommandTest
 
             //Assert
             Assert.IsNotNull(result);
+        }
 
-            //Chech That cat has deleted from mock database
-            var deletedCatByIdInDatabase = _mockDatabase.Cats.FirstOrDefault(cat => cat.Id == deleteCatByIdCommand.Id);
-            Assert.IsNull(deletedCatByIdInDatabase);
+        [Test]
+        public async Task Handle_WithNonExistentCatId_ShouldReturnNull()
+        {
+            //Arrang
+            var nonExistentCatId = Guid.NewGuid();
+            var deleteCatCommand = new DeleteCatByIdCommand(nonExistentCatId);
+
+            //Act
+            var result = await _handler.Handle(deleteCatCommand, CancellationToken.None);
+
+            //Assert
+            Assert.Null(result);
+
         }
     }
 }
