@@ -18,8 +18,8 @@ namespace Application.Queries.Birds.GetAll
             {
                 return Task.FromResult<List<Bird>>(null);
             }
-            List<Bird> allBirdsFromMockDatabase = _mockDatabase.Birds ?? new List<Bird>();
-            return Task.FromResult(allBirdsFromMockDatabase);
+            List<Bird> allBirdsFromRealDatabase = _mockDatabase.Birds.ToList();
+            return Task.FromResult(allBirdsFromRealDatabase);
         }
     }
 }

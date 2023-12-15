@@ -1,5 +1,4 @@
 ﻿using Application.Commands.Birds.AddBird;
-using Application.Commands.Cats.AddCat;
 using Application.Dtos;
 using Infrastructure.Database;
 

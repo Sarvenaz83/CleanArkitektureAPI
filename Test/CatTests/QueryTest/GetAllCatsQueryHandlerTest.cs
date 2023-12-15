@@ -1,6 +1,4 @@
 ﻿using Application.Queries.Cats.GetAll;
-using Application.Queries.Dogs.GetAll;
-using Application.Queries.Dogs;
 using Domain.Models;
 using Infrastructure.Database;
 
@@ -25,7 +23,7 @@ namespace Test.CatTests.QueryTest
         public async Task Handle_GetAllCats_FromDatabase_ReturnsCorrect()
         {
             //Arrange
-            List<Cat> listOfCat = _originalDatabase.Cats;
+            List<Cat> listOfCat = _originalDatabase.Cats.ToList();
 
             //Act
             List<Cat> result = await _handler.Handle(new GetAllCatsQuery(), CancellationToken.None);

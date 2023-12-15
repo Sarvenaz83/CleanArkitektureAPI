@@ -42,8 +42,8 @@ namespace Test.CatTests.CommandTest
             //Arrang
             var nonExistentCatId = Guid.NewGuid();
             var updatedCatDto = new CatDto { Name = "UpdatedCatName" };
-            var mockDatabse = new MockDatabase();
-            var handler = new UpdateCatByIdCommandHandler(mockDatabse);
+            var mockDatabase = new MockDatabase();
+            var handler = new UpdateCatByIdCommandHandler(mockDatabase);
 
             var updateCatCommand = new UpdateCatByIdCommand(updatedCatDto, nonExistentCatId);
 

@@ -23,7 +23,7 @@ namespace Application.Commands.Birds.UpdateBird
                 return Task.FromResult(birdToUpdate);
             }
 
-            return Task.FromResult(birdToUpdate);
+            return Task.FromResult<Bird>(null);
 
         }
     }

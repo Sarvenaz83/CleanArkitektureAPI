@@ -2,6 +2,7 @@
 using Domain.Models;
 using Infrastructure.Database;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries.Dogs
 {
@@ -19,8 +20,8 @@ namespace Application.Queries.Dogs
             {
                 return Task.FromResult<List<Dog>>(null);
             }
-            List<Dog> allDogsFromMockDatabase = _mockDatabase.Dogs;
-            return Task.FromResult(allDogsFromMockDatabase);
+            List<Dog> allDogsFromRealDatabase = _mockDatabase.Dogs.ToList();
+            return Task.FromResult(allDogsFromRealDatabase);
         }
     }
 }

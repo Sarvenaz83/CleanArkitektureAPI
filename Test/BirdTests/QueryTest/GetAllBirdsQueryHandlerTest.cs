@@ -23,7 +23,7 @@ namespace Test.BirdTests.QueryTest
         public async Task Handle_GetAllBirds_FromDatabase_ReturnsCorrect()
         {
             //Arrange
-            List<Bird> listOfBird = _originalDatabase.Birds;
+            List<Bird> listOfBird = _originalDatabase.Birds.ToList();
 
             //Act
             List<Bird> result = await _handler.Handle(new GetAllBirdsQuery(), CancellationToken.None);

@@ -19,8 +19,8 @@ namespace Application.Queries.Cats.GetAll
             {
                 return Task.FromResult<List<Cat>>(null);
             }
-            List<Cat> allCatsFromMockDatabase = _mockDatabase.Cats;
-            return Task.FromResult(allCatsFromMockDatabase);
+            List<Cat> allCatsFromRealDatabase = _mockDatabase.Cats.ToList();
+            return Task.FromResult(allCatsFromRealDatabase);
         }
     }
 }
