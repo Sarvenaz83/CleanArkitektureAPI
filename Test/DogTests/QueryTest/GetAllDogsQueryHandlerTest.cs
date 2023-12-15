@@ -24,7 +24,7 @@ namespace Test.DogTests.QueryTest
         public async Task Handle_GetAllDogs_FromDatabase_ReturnsCorrect()
         {
             //Arrange
-            List<Dog> listOfDog = _originalDatabase.Dogs;
+            List<Dog> listOfDog = _originalDatabase.Dogs.ToList();
 
             //Act
             List<Dog> result = await _handler.Handle(new GetAllDogsQuery(), CancellationToken.None);

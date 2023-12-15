@@ -1,10 +1,12 @@
-﻿using Application.Dtos;
+﻿using Application.Commands.Users.Register;
+using Application.Dtos.Users;
+using Application.Dtos.Validation;
+using Application.Validators.User;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Application.Exceptions.Authorize;
+using Application.Queries.UsersLogin;
 
 namespace API.Controllers.UserController
 {
@@ -12,63 +14,66 @@ namespace API.Controllers.UserController
     [ApiController]
     public class UserController : ControllerBase
     {
-        public static User user = new User();
-        private readonly IConfiguration _configuration;
+        internal readonly IMediator _imediator;
+        internal readonly UserValidator _userValidator;
 
-        public UserController(IConfiguration configuration)
+        public UserController(IMediator mediator, UserValidator userValidator)
         {
-            _configuration = configuration;
+            _imediator = mediator;
+            _userValidator = userValidator;
         }
 
         [HttpPost("register")]
-        public ActionResult<User> Register(UserDto request)
+        [ProducesResponseType(typeof(UserCredentialsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Errors), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<User>> Register([FromBody] UserCredentialsDto userToRegister)
         {
-            string password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            var inputValidation = _userValidator.Validate(userToRegister);
 
-            user.Username = request.Username;
-            user.Password = password;
+            if (!inputValidation.IsValid)
+            {
+                return BadRequest(inputValidation.Errors.ConvertAll(errors => errors.ErrorMessage));
+            }
 
-            return Ok(user);
+            try
+            {
+                return Ok(await _imediator.Send(new RegisterUserCommand(userToRegister)));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
         }
 
         [HttpPost("login")]
-        public ActionResult<User> Login(UserDto request)
+        [ProducesResponseType(typeof(TokenDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Errors), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<User>> Login([FromBody] UserCredentialsDto userToLogin)
         {
-            if (user.Username != request.Username)
+            var inputValidation = _userValidator.Validate(userToLogin);
+
+            if (!inputValidation.IsValid)
             {
-                return BadRequest("User not found");
+                return BadRequest(inputValidation.Errors.ConvertAll(errors => errors.ErrorMessage));
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+            try
             {
-                return BadRequest("Password is wrong!");
+                string token = await _imediator.Send(new LoginUserQuery(userToLogin));
+                return Ok(new TokenDto { TokenValue = token });
             }
 
-            string token = GenerateJWTToken(user);
-            return Ok(token);
-        }
-
-        private string GenerateJWTToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
+            catch (UnAuthorizedException ex)
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, "Admin"),
-            };
-
-            var key = Encoding.ASCII.GetBytes(
-                _configuration["JWTToken:Token"]!);
-
-
-            var token = new JwtSecurityToken
-            (
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            );
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(token);
+                return BadRequest(ex.Message);
+            }
         }
+
+
+
+
     }
 }

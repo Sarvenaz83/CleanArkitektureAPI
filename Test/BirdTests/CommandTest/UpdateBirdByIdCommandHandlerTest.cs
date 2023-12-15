@@ -1,5 +1,4 @@
 ﻿using Application.Commands.Birds.UpdateBird;
-using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Domain.Models;
 using Infrastructure.Database;
@@ -43,8 +42,8 @@ namespace Test.BirdTests.CommandTest
             //Arrang
             var nonExistentBirdId = Guid.NewGuid();
             var updatedBirdDto = new BirdDto { Name = "UpdatedBirdName" };
-            var mockDatabse = new MockDatabase();
-            var handler = new UpdateBirdByIdCommandHandler(mockDatabse);
+            var realDatabase = new MockDatabase();
+            var handler = new UpdateBirdByIdCommandHandler(realDatabase);
 
             var updateBirdCommand = new UpdateBirdByIdCommand(updatedBirdDto, nonExistentBirdId);
 

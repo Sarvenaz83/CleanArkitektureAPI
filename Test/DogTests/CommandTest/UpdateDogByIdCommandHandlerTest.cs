@@ -1,5 +1,4 @@
-﻿using Application.Commands.Cats.UpdateCat;
-using Application.Commands.Dogs.UpdateDog;
+﻿using Application.Commands.Dogs.UpdateDog;
 using Application.Dtos;
 using Domain.Models;
 using Infrastructure.Database;
@@ -26,7 +25,7 @@ namespace Test.DogTests.CommandTest
             _mockDatabase.Dogs.Add(newDog);
 
             //Create a sample
-            var updateDogCommand = new UpdateDogByIdCommand(updatedDog: new Application.Dtos.DogDto { Name = "UpdatedDogName" }, id: newDog.Id);
+            var updateDogCommand = new UpdateDogByIdCommand(updatedDog: new DogDto { Name = "UpdatedDogName" }, id: newDog.Id);
 
             //Act
             var result = await _handler.Handle(updateDogCommand, CancellationToken.None);
@@ -42,8 +41,8 @@ namespace Test.DogTests.CommandTest
             //Arrang
             var nonExistentDogId = Guid.NewGuid();
             var updatedDogDto = new DogDto { Name = "UpdatedDogName" };
-            var mockDatabse = new MockDatabase();
-            var handler = new UpdateDogByIdCommandHandler(mockDatabse);
+            var mockDatabase = new MockDatabase();
+            var handler = new UpdateDogByIdCommandHandler(mockDatabase);
 
             var updateDogCommand = new UpdateDogByIdCommand(updatedDogDto, nonExistentDogId);
 

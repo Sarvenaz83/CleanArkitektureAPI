@@ -1,6 +1,6 @@
-﻿namespace Application.Dtos
+﻿namespace Application.Dtos.Users
 {
-    public class UserDto
+    public class UserCredentialsDto
     {
         public required string Username { get; set; }
         public required string Password { get; set; }

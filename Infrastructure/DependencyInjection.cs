@@ -1,4 +1,5 @@
-﻿using Infrastructure.Database;
+﻿using Infrastructure.Database.MySQLDatabase;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
@@ -7,7 +8,12 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddSingleton<MockDatabase>();
+            services.AddSingleton<RealDatabase>();
+
+            services.AddDbContext<RealDatabase>(option =>
+            {
+                option.UseSqlServer("Server=MINAZ\\SQLEXPRESS; Database=minaz-claen-api-database; Trusted_Connection=True; TrustServerCertificate=True");
+            });
             return services;
         }
     }
