@@ -11,7 +11,7 @@ namespace Infrastructure
         {
 
             services.AddDbContext<MyAppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("Server=MINAZ\\SQLEXPRESS; Database=CleanArkitektureAPI; Trusted_Connection=true; TrustServerCertificate=true;")));
-            
+
             return services;
         }
     }

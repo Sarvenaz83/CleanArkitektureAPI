@@ -24,7 +24,7 @@ namespace Infrastructure.Database.Database
             base.OnModelCreating(modelBuilder);
 
             //Configuration many-to-many relationship
-            modelBuilder.Entity<UserAnimal>().HasKey(_userAnimal => new {_userAnimal.UserId, _userAnimal.AnimalId});
+            modelBuilder.Entity<UserAnimal>().HasKey(_userAnimal => new { _userAnimal.UserId, _userAnimal.AnimalId });
 
             modelBuilder.Entity<UserAnimal>()
                 .HasOne(_userAnimal => _userAnimal.User)
@@ -36,7 +36,7 @@ namespace Infrastructure.Database.Database
                 .WithMany(_animal => _animal.UserAnimals)
                 .HasForeignKey(_userAnimal => _userAnimal.AnimalId);
 
-            
+
         }
     }
 }
