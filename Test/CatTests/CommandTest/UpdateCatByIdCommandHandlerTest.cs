@@ -25,7 +25,7 @@ namespace Test.CatTests.CommandTest
             _mockDatabase.Cats.Add(newCat);
 
             //Create a sample
-            var updateCatCommand = new UpdateCatByIdCommand(updatedCat: new Application.Dtos.CatDto { Name= "UpdatedCatName", LikesToPlay = false}, id: newCat.Id);
+            var updateCatCommand = new UpdateCatByIdCommand(updatedCat: new Application.Dtos.CatDto { Name = "UpdatedCatName", LikesToPlay = false }, id: newCat.Id);
 
             //Act
             var result = await _handler.Handle(updateCatCommand, CancellationToken.None);

@@ -6,9 +6,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add configuration
+builder.Configuration.AddJsonFile("appsettings.json", optional: false);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -42,10 +46,10 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddApplication().AddInfrastructure();
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
 // Configure JWT Authentication
-/*builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options =>
 {
 }).AddJwtBearer("Bearer", options =>
 {
@@ -57,7 +61,7 @@ builder.Services.AddApplication().AddInfrastructure();
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             builder.Configuration["JWTToken:Token"]!)),
     };
-});*/
+});
 
 var app = builder.Build();
 

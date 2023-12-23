@@ -2,11 +2,14 @@
 
 namespace Domain.Models
 {
-    public class Dog: AnimalModel
+    public class Dog : AnimalModel
     {
+        public string Breed { get; set; } = string.Empty;
+        public int Weight { get; set; }
         public string Bark()
         {
             return "This animal barks";
+
         }
     }
 }

@@ -32,6 +32,6 @@ namespace Test.CatTests.CommandTest
             Assert.That(result, Is.Not.Null);
         }
     }
-    
+
 
 }
