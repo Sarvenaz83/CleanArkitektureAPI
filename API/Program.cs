@@ -6,8 +6,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Add configuration
-builder.Configuration.AddJsonFile("appsettings.json", optional: false);
 
 // Add services to the container.
 
