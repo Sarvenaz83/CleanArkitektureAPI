@@ -14,7 +14,10 @@ namespace Infrastructure.Database.Database
 
         }
 
-
+        public virtual DbSet<Dog> Dogs { get; set; }
+        public virtual DbSet<Cat> Cats { get; set; }
+        public virtual DbSet<Bird> Birds { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=MINAZ\\SQLEXPRESS; Database=CleanArkitektureAPI; Trusted_Connection=true; TrustServerCertificate=true;");

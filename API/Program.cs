@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "My First API", Version = "v1" });
+    options.SwaggerDoc("v2", new OpenApiInfo { Title = "My second API", Version = "v2" });
 
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
